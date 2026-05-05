@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Brand */
+    --brand: #0f172a;
+    --brand2: #1a2340;
+    --accent: #16a34a;
+    --accent2: #22c55e;
+    --accent-rgb: 22, 163, 74;
+    --accent-soft: rgba(22, 163, 74, 0.10);
+    --accent-gradient: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+
+    /* Status */
+    --teal: #0f766e;
+    --teal-soft: rgba(15, 118, 110, 0.12);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.12);
+    --blue: #3B82F6;
+    --blue-soft: rgba(59, 130, 246, 0.12);
+    --purple: #8B5CF6;
+
+    /* Glass system */
+    --glass: rgba(255, 255, 255, 0.68);
+    --glass-strong: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.72);
+    --glass-shadow: 0 4px 24px rgba(10, 15, 30, 0.07), 0 1px 0 rgba(255, 255, 255, 0.80) inset;
+    --glass-shadow-hover: 0 14px 44px rgba(10, 15, 30, 0.12), 0 1px 0 rgba(255, 255, 255, 0.90) inset;
+
+    /* Text */
+    --text: #0A0F1E;
+    --text2: #374151;
+    --text3: #6B7280;
+    --text4: #9CA3AF;
+
+    /* Surface / fallbacks */
+    --surface: #f3f4f6;
+    --card: rgba(255, 255, 255, 0.68);
+    --border: rgba(255, 255, 255, 0.72);
+    --border2: rgba(200, 210, 230, 0.80);
+    --divider: rgba(10, 15, 30, 0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f3f4f6;
+    color: var(--text);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100%;
+    text-align: left;
+    border: none;
+    display: block;
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px)   rotate(0deg); }
+  33%       { transform: translateY(-28px) rotate(1.2deg); }
+  66%       { transform: translateY(-14px) rotate(-0.6deg); }
+}
+
+@keyframes floatReverse {
+  0%, 100% { transform: translateY(-14px) rotate(0deg); }
+  50%       { transform: translateY(14px)  rotate(0.8deg); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.82); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.06); }
+}
+
+/* ─── Utility classes ────────────────────────────────────── */
+
+.fade-in  { animation: fadeIn  0.22s ease both; }
+.slide-up { animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.scale-in { animation: scaleIn 0.20s ease both; }
+
+.pulse-sync { animation: pulseDot 1.8s ease-in-out infinite; }
+
+/* Glass card — apply to any container */
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 16px;
+  transition: box-shadow 0.26s ease, transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.glass-card:hover {
+  box-shadow: var(--glass-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(90deg, rgba(200,210,230,0.5) 25%, rgba(220,228,240,0.8) 50%, rgba(200,210,230,0.5) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 6px;
+}
+
+/* ─── Print styles ───────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  body {
+    background: white !important;
+    background-attachment: initial !important;
+  }
+  .print-receipt {
+    max-width: 280px;
+    margin: 0 auto;
+    font-size: 12px;
+  }
+}

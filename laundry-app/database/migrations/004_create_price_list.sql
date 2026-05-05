@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS price_list (
+  id CHAR(36) PRIMARY KEY,
+  item_name VARCHAR(100) NOT NULL,
+  price_pkr DECIMAL(10,2) NOT NULL,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT NOW()
+);

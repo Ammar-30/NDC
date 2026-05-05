@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS branches (
+  id CHAR(36) PRIMARY KEY,
+  owner_id CHAR(36) NOT NULL REFERENCES owners(id) ON DELETE RESTRICT,
+  name VARCHAR(100) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  address TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);

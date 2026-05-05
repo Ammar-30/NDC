@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS users (
+  id CHAR(36) PRIMARY KEY,
+  branch_id CHAR(36) NOT NULL REFERENCES branches(id) ON DELETE RESTRICT,
+  name VARCHAR(100) NOT NULL,
+  role VARCHAR(10) NOT NULL CHECK (role IN ('staff', 'owner')),
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
