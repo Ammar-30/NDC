@@ -12,6 +12,7 @@ import OrderDetailPage from './pages/OrderDetail/OrderDetailPage'
 import CustomersPage   from './pages/Customers/CustomersPage'
 import ReportsPage     from './pages/Reports/ReportsPage'
 import PriceListPage   from './pages/PriceList/PriceListPage'
+import AdminPage       from './pages/Admin/AdminPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, loading } = useContext(AuthContext)
@@ -49,7 +50,14 @@ function PrivateRoute({ children }) {
 
 function DashboardRoute() {
   const { user } = useContext(AuthContext)
+  if (user?.role === 'super-admin') return <Navigate to="/admin" replace />
   return user?.role === 'owner' ? <OwnerDashboard /> : <StaffDashboard />
+}
+
+function SuperAdminRoute({ children }) {
+  const { user, loading } = useContext(AuthContext)
+  if (loading) return null
+  return user?.role === 'super-admin' ? children : <Navigate to="/" replace />
 }
 
 export default function App() {
@@ -87,6 +95,7 @@ export default function App() {
             <Route path="/staff/customers"   element={<PrivateRoute><CustomersPage /></PrivateRoute>} />
             <Route path="/owner/reports"     element={<PrivateRoute><ReportsPage /></PrivateRoute>} />
             <Route path="/owner/price-list"  element={<PrivateRoute><PriceListPage /></PrivateRoute>} />
+            <Route path="/admin" element={<PrivateRoute><SuperAdminRoute><AdminPage /></SuperAdminRoute></PrivateRoute>} />
 
             <Route path="/orders"     element={<Navigate to="/staff/orders"     replace />} />
             <Route path="/orders/new" element={<Navigate to="/staff/orders/new" replace />} />

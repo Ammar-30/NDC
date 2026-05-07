@@ -13,7 +13,8 @@ const orderRoutes = require('./src/routes/orders');
 const priceListRoutes = require('./src/routes/priceList');
 const inventoryRoutes = require('./src/routes/inventory');
 const reportRoutes = require('./src/routes/reports');
-const syncRoutes = require('./src/routes/sync');
+const syncRoutes   = require('./src/routes/sync');
+const adminRoutes  = require('./src/routes/admin');
 
 const app = express();
 
@@ -45,7 +46,8 @@ app.use('/api/price-list', priceListRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/reports', reportRoutes);
 // CouchDB-compatible sync endpoint — auth + scope enforced inside the router
-app.use('/api/sync', syncRoutes);
+app.use('/api/sync',  syncRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use(errorHandler);
 

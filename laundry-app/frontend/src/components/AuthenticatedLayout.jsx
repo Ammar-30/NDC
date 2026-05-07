@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard, ShoppingBag, Plus, Users,
-  BarChart2, ListChecks, LogOut,
+  BarChart2, ListChecks, LogOut, ShieldCheck,
 } from 'lucide-react'
 import { AuthContext } from '../context/AuthContext'
 import { SyncContext } from '../context/SyncContext'
@@ -25,6 +25,10 @@ const OWNER_NAV = [
   { to: '/',                  label: 'Dashboard', Icon: BarChart2,   exact: true },
   { to: '/owner/price-list',  label: 'Price List', Icon: ListChecks },
   { to: '/owner/reports',     label: 'Reports',   Icon: BarChart2 },
+]
+
+const SUPER_ADMIN_NAV = [
+  { to: '/admin', label: 'Admin Panel', Icon: ShieldCheck, exact: true },
 ]
 
 function NavItem({ to, label, Icon, exact }) {
@@ -64,7 +68,9 @@ export default function AuthenticatedLayout({ title, subtitle, action, children 
   const { syncStatus } = useContext(SyncContext)
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  const navItems = user?.role === 'owner' ? OWNER_NAV : STAFF_NAV
+  const navItems = user?.role === 'super-admin' ? SUPER_ADMIN_NAV
+    : user?.role === 'owner' ? OWNER_NAV
+    : STAFF_NAV
   const mobileNav = navItems.slice(0, 5)
 
   return (
@@ -161,8 +167,8 @@ export default function AuthenticatedLayout({ title, subtitle, action, children 
                   <span style={{
                     fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
                     letterSpacing: '0.05em',
-                    color: user?.role === 'owner' ? '#F59E0B' : '#22c55e',
-                    background: user?.role === 'owner' ? 'rgba(245,158,11,0.15)' : 'rgba(34,197,94,0.15)',
+                    color: user?.role === 'super-admin' ? '#7c3aed' : user?.role === 'owner' ? '#F59E0B' : '#22c55e',
+                    background: user?.role === 'super-admin' ? 'rgba(139,92,246,0.15)' : user?.role === 'owner' ? 'rgba(245,158,11,0.15)' : 'rgba(34,197,94,0.15)',
                     padding: '1px 6px', borderRadius: 4,
                   }}>
                     {user?.role}

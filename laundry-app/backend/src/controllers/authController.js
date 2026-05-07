@@ -57,7 +57,27 @@ async function login(req, res, next) {
     }
 
     if (!row) {
+      // Try admins table last
+      const adminResult = await pool.query(
+        `SELECT id, name, email, password_hash, is_active
+         FROM admins
+         WHERE email = ANY($1::varchar[])
+         ORDER BY (email = $2) DESC
+         LIMIT 1`,
+        [candidateEmails, canonical]
+      );
+      if (adminResult.rows.length > 0) {
+        row = adminResult.rows[0];
+        userType = 'admin';
+      }
+    }
+
+    if (!row) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    if (row.is_active === false) {
+      return res.status(403).json({ error: 'Account is deactivated' });
     }
 
     const valid = await bcrypt.compare(password, row.password_hash);
@@ -66,7 +86,9 @@ async function login(req, res, next) {
     }
 
     let payload;
-    if (userType === 'owner') {
+    if (userType === 'admin') {
+      payload = { userId: row.id, name: row.name, role: 'super-admin' };
+    } else if (userType === 'owner') {
       payload = { userId: row.id, name: row.name, role: 'owner', ownerId: row.id };
     } else {
       payload = {
@@ -81,6 +103,11 @@ async function login(req, res, next) {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
+
+    // Log login event (best-effort — don't block response)
+    const { logActivity } = require('../utils/activityLogger');
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || null;
+    logActivity(pool, payload, 'LOGIN', null, null, { email: row.email }, ip).catch(() => {});
 
     res.json({ token, user: { id: row.id, name: row.name, email: row.email, role: payload.role } });
   } catch (err) {

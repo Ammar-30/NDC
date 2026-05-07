@@ -141,3 +141,56 @@ export function getReportsDaily(params) {
 export function getReportsOrders(params) {
   return apiRequest('GET', `/reports/orders${toQuery(params)}`)
 }
+
+// ── ADMIN ────────────────────────────────────────────────────────────────────
+
+export function getAdminStats() {
+  return apiRequest('GET', '/admin/stats')
+}
+
+export function getAdminOwners() {
+  return apiRequest('GET', '/admin/owners')
+}
+export function createAdminOwner(data) {
+  return apiRequest('POST', '/admin/owners', data)
+}
+export function updateAdminOwner(id, data) {
+  return apiRequest('PUT', `/admin/owners/${id}`, data)
+}
+
+export function getAdminBranches() {
+  return apiRequest('GET', '/admin/branches')
+}
+export function createAdminBranch(data) {
+  return apiRequest('POST', '/admin/branches', data)
+}
+export function updateAdminBranch(id, data) {
+  return apiRequest('PUT', `/admin/branches/${id}`, data)
+}
+
+export function getAdminUsers() {
+  return apiRequest('GET', '/admin/users')
+}
+export function createAdminUser(data) {
+  return apiRequest('POST', '/admin/users', data)
+}
+export function updateAdminUser(id, data) {
+  return apiRequest('PUT', `/admin/users/${id}`, data)
+}
+export function deleteAdminUser(id) {
+  return apiRequest('DELETE', `/admin/users/${id}`)
+}
+
+export function getAdminAdmins() {
+  return apiRequest('GET', '/admin/admins')
+}
+export function createAdminAdmin(data) {
+  return apiRequest('POST', '/admin/admins', data)
+}
+export function updateAdminAdmin(id, data) {
+  return apiRequest('PUT', `/admin/admins/${id}`, data)
+}
+
+export function getActivityLogs(params = {}) {
+  return apiRequest('GET', `/admin/activity-logs${toQuery(params)}`)
+}
